@@ -12,7 +12,7 @@ So far, it seems that the channels in the `sync` tests are about 12 times faster
 
 ## Results from my machine (2014 macbook pro, 2.8 gHz i7, 16GB)
 
-### Using `std::sync::mpsc`
+### Sync: 
 
 ```
 Running with parameters: RunParameters { name: "sync", sender_threads: 1, windows: 4, secs_per_window: 5 }
@@ -30,7 +30,7 @@ Send:
 
 Sending is ridiculously fast using the standard channels, so fast that a single sender can outpace the receiver. So it's no surprise that the latency for receiving each message is really high, since the channel must be developing quite the backlog.
 
-### Using `futures::sync::mpsc`
+### Async:
 
 With 2 senders:
 
@@ -82,3 +82,115 @@ Send:
 	Total count: 5525504, rate (per second): 276275.2
 	latency (ns): p50: 28705 p90: 29967 p9999: 77726
 ```
+
+
+## On an Amazon EC2 m4.4xlarge instance 
+
+### Async:
+
+```
+Running with parameters: RunParameters { name: "async", sender_threads: 1, windows: 4, secs_per_window: 5 }
+Starting recv receiver
+Finished: async
+RecvLatency:
+	Total count: 25995776, rate (per second): 1299788.8
+	latency (ns): p50: 1548 p90: 11273 p9999: 23987
+RecvLoopTime:
+	Total count: 25995776, rate (per second): 1299788.8
+	latency (ns): p50: 453 p90: 1584 p9999: 22938
+Send:
+	Total count: 25995776, rate (per second): 1299788.8
+	latency (ns): p50: 703 p90: 1090 p9999: 14435
+	
+Running with parameters: RunParameters { name: "async", sender_threads: 2, windows: 4, secs_per_window: 5 }
+Starting recv receiver
+Finished: async
+RecvLatency:
+	Total count: 45148416, rate (per second): 2257420.8
+	latency (ns): p50: 9865004 p90: 175019918 p9999: 198239585
+RecvLoopTime:
+	Total count: 45148416, rate (per second): 2257420.8
+	latency (ns): p50: 394 p90: 578 p9999: 10986
+Send:
+	Total count: 45619712, rate (per second): 2280985.6
+	latency (ns): p50: 798 p90: 1054 p9999: 12370
+	
+Running with parameters: RunParameters { name: "async", sender_threads: 3, windows: 4, secs_per_window: 5 }
+Starting recv receiver
+Finished: async
+RecvLatency:
+	Total count: 31100416, rate (per second): 1555020.8
+	latency (ns): p50: 340913030 p90: 355408544 p9999: 363998479
+RecvLoopTime:
+	Total count: 31100416, rate (per second): 1555020.8
+	latency (ns): p50: 430 p90: 1025 p9999: 18744
+Send:
+	Total count: 31600128, rate (per second): 1580006.4
+	latency (ns): p50: 1016 p90: 2816 p9999: 37225
+	
+Running with parameters: RunParameters { name: "async", sender_threads: 4, windows: 4, secs_per_window: 5 }
+Starting recv receiver
+Finished: async
+RecvLatency:
+	Total count: 21484544, rate (per second): 1074227.2
+	latency (ns): p50: 470030484 p90: 641023869 p9999: 716185797
+RecvLoopTime:
+	Total count: 21484544, rate (per second): 1074227.2
+	latency (ns): p50: 450 p90: 2386 p9999: 19891
+Send:
+	Total count: 21983744, rate (per second): 1099187.2
+	latency (ns): p50: 1218 p90: 14803 p9999: 44499
+```
+
+### Sync:
+
+```
+Running with parameters: RunParameters { name: "sync", sender_threads: 1, windows: 4, secs_per_window: 5 }
+Finished: sync
+RecvLatency:
+	Total count: 62380800, rate (per second): 3119040
+	latency (ns): p50: 59147 p90: 9026143 p9999: 9445573
+RecvLoopTime:
+	Total count: 62380800, rate (per second): 3119040
+	latency (ns): p50: 284 p90: 379 p9999: 9888
+Send:
+	Total count: 62410240, rate (per second): 3120512
+	latency (ns): p50: 302 p90: 420 p9999: 10576
+	
+Running with parameters: RunParameters { name: "sync", sender_threads: 2, windows: 4, secs_per_window: 5 }
+Finished: sync
+RecvLatency:
+	Total count: 51998720, rate (per second): 2599936
+	latency (ns): p50: 6373731468 p90: 6966436955 p9999: 7116760810
+RecvLoopTime:
+	Total count: 51998720, rate (per second): 2599936
+	latency (ns): p50: 340 p90: 460 p9999: 11101
+Send:
+	Total count: 81327616, rate (per second): 4066380.8
+	latency (ns): p50: 462 p90: 590 p9999: 13738
+	
+Running with parameters: RunParameters { name: "sync", sender_threads: 3, windows: 4, secs_per_window: 5 }
+Finished: sync
+RecvLatency:
+    Total count: 43709952, rate (per second): 2185497.6
+    latency (ns): p50: 9801115370 p90: 11012296147 p9999: 11330123727
+RecvLoopTime:
+    Total count: 43709952, rate (per second): 2185497.6
+    latency (ns): p50: 430 p90: 565 p9999: 12026
+Send:
+    Total count: 100680192, rate (per second): 5034009.6
+    latency (ns): p50: 560 p90: 715 p9999: 13239
+    
+Running with parameters: RunParameters { name: "sync", sender_threads: 4, windows: 4, secs_per_window: 5 }
+Finished: sync
+RecvLatency:
+    Total count: 37764608, rate (per second): 1888230.4
+    latency (ns): p50: 11622181503 p90: 12893491823 p9999: 13237089207
+RecvLoopTime:
+    Total count: 37764608, rate (per second): 1888230.4
+    latency (ns): p50: 494 p90: 649 p9999: 12706
+Send:
+    Total count: 111678976, rate (per second): 5583948.8
+    latency (ns): p50: 689 p90: 859 p9999: 14525
+```
+

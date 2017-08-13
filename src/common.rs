@@ -46,13 +46,12 @@ pub enum Metric {
     RecvLatency,
     RecvLoopTime,
     Send,
-    SenderClone,
 }
 
 impl Metric {
     pub fn all() -> Vec<Metric> {
         use self::Metric::*;
-        vec![RecvLatency, RecvLoopTime, Send, SenderClone]
+        vec![RecvLatency, RecvLoopTime, Send]
     }
 }
 
