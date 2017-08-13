@@ -1,0 +1,19 @@
+[package]
+name = "timing-test"
+version = "0.1.0"
+authors = ["pfried <philipsfried@gmail.com>"]
+
+[dependencies]
+tokio-core = "*"
+futures = "*"
+tic = "*"
+clap = "*"
+
+
+[[bin]]
+name = "async"
+path = "src/async.rs"
+
+[[bin]]
+name = "sync"
+path = "src/sync.rs"
