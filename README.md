@@ -83,8 +83,29 @@ Send:
 	latency (ns): p50: 28705 p90: 29967 p9999: 77726
 ```
 
+## Sync using select! macro
 
-## On an Amazon EC2 m4.4xlarge instance 
+An important feature is the ability to receive a message from one of multiple possible receivers. For the channels in std, this requires a nightly compiler and enabling the `mpsc_select` feature.
+
+```
+Running with parameters: RunParameters { name: "sync-select", sender_threads: 2, windows: 4, secs_per_window: 5 }
+Finished: sync-select
+RecvLatency:
+	Total count: 20180992, rate (per second): 1009049.6
+	latency (ns): p50: 8924942042 p90: 9990093931 p9999: 10230612100
+RecvLoopTime:
+	Total count: 20180992, rate (per second): 1009049.6
+	latency (ns): p50: 92 p90: 100 p9999: 2714
+Send:
+	Total count: 78127104, rate (per second): 3906355.2
+	latency (ns): p50: 82 p90: 91 p9999: 660603
+```
+
+## Async selecting from 2 receivers
+
+//TODO
+
+## Repeating the tests on an Amazon EC2 m4.4xlarge instance 
 
 ### Async:
 

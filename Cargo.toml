@@ -17,3 +17,7 @@ path = "src/async.rs"
 [[bin]]
 name = "sync"
 path = "src/sync.rs"
+
+[[bin]]
+name = "sync-select"
+path = "src/sync_select.rs"
